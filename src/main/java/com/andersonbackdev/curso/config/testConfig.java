@@ -1,15 +1,9 @@
 package com.andersonbackdev.curso.config;
 
 
-import com.andersonbackdev.curso.entities.Category;
-import com.andersonbackdev.curso.entities.Order;
-import com.andersonbackdev.curso.entities.Product;
-import com.andersonbackdev.curso.entities.User;
+import com.andersonbackdev.curso.entities.*;
 import com.andersonbackdev.curso.entities.enums.OrderStatus;
-import com.andersonbackdev.curso.repositories.CategoryRepository;
-import com.andersonbackdev.curso.repositories.OrderRepository;
-import com.andersonbackdev.curso.repositories.ProductRepository;
-import com.andersonbackdev.curso.repositories.UserRepository;
+import com.andersonbackdev.curso.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +27,9 @@ public class testConfig implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
 
     @Override
@@ -73,6 +70,13 @@ public class testConfig implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(u1, u2));
         orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 
 
     }
