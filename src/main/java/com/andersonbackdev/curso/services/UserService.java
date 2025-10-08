@@ -4,6 +4,7 @@ package com.andersonbackdev.curso.services;
 import com.andersonbackdev.curso.entities.User;
 import com.andersonbackdev.curso.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,5 +31,17 @@ public class UserService {
 
     public void delete(Long id){
         userRepository.deleteById(id);
+    }
+
+    public User update(Long id, User obj){
+        User entity = userRepository.getReferenceById(id);
+        updateData(entity, obj);
+        return userRepository.save(entity);
+    }
+
+    private void updateData(User entity, User obj) {
+        entity.setName(obj.getName());
+        entity.setEmail(obj.getEmail());
+        entity.setPhone(obj.getPhone());
     }
 }
