@@ -3,8 +3,11 @@ package com.andersonbackdev.curso.services;
 
 import com.andersonbackdev.curso.entities.User;
 import com.andersonbackdev.curso.repositories.UserRepository;
+import com.andersonbackdev.curso.services.exceptions.DataBaseException;
 import com.andersonbackdev.curso.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +29,21 @@ public class UserService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
+    public User insert(User obj) {
         return userRepository.save(obj);
     }
 
-    public void delete(Long id){
-        userRepository.deleteById(id);
+    public void delete(Long id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e){
+            throw new DataBaseException(e.getMessage());
+        }
     }
 
-    public User update(Long id, User obj){
+    public User update(Long id, User obj) {
         User entity = userRepository.getReferenceById(id);
         updateData(entity, obj);
         return userRepository.save(entity);
